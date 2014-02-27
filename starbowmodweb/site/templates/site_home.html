@@ -1,82 +1,123 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load bbformat %}
+{% block head %}
+<script src="{% static 'site/js/stream_list.js' %}"></script>
+<script src="{% static 'site/js/mustache.js' %}"></script>
+<script>
+$(document).ready(function () {
+  StreamListHandler.init("{% static 'site/js/streams.json' %}");
+});
+</script>
+{% endblock %}
 {% block content %}
 {{ latest_article.message|bbheader:latest_article|safe }}
-<div class="column">
-  <h2>News and Updates</h2>
-  <ul class="listing">
-  {% for article in recent_articles %}
-    <li><a href="{{ article.url }}">{{ article.subject }}</a></li>
-  {% endfor %}
-  </ul>
-</div>
-<div class="column">
-  <h2>Discussion</h2>
-  <ul class="listing">
-  {% for dicussion in recent_discussions %}
-    <li><a href="{{ dicussion.url }}">{{ dicussion.subject }}</a></li>
-  {% endfor %}
-  </ul>
-</div>
-<div class="column">
-  <h2>Upcoming Events</h2>
-  <ul class="listing">
-  {% for event in upcoming_events %}
-    {% if event.is_today %}
-      <li><a href="{{ event.url }}">{{ event.start|date:"g:i A" }} GMT - {{ event.name }}</a></li>
-    {% else %}
-      <li><a href="{{ event.url }}">{{ event.start|date:"Y-m-d" }} {{ event.name }}</a></li>
-    {% endif %}
-  {% endfor %}
-  </ul>
-</div>
-<div class="column">
-  <h2>NA Ladder</h2>
-  <table class="ladder-mini">
-    <thead>
-      <tr>
-        <th>Username</th><th style="text-align:right;">Points</th><th style="text-align:right;">Wins</th><th style="text-align:right;">Losses</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for stats in ladder_na %}
-        <tr>
-          <td><a href="{% url 'ladder.views.show_player' stats.client.pk %}">{{ stats.client.username }}</a></td>
-          <td style="text-align:right;">{{ stats.ladder_points }}</td>
-          <td style="text-align:right;">{{ stats.ladder_wins }}</td>
-          <td style="text-align:right;">{{ stats.ladder_losses }}</td>
-        </tr>
+<div class="row" id="main_row">
+  <div class="column_1">
+    <div class="module" id="upcoming_events_module">
+      <h2>Upcoming Events</h2>
+      <ul class="listing">
+      {% for event in upcoming_events %}
+        {% if event.is_today %}
+          <li><a href="{{ event.url }}">{{ event.start|date:"g:i A" }} GMT - {{ event.name }}</a></li>
+        {% else %}
+          <li><a href="{{ event.url }}">{{ event.start|date:"Y-m-d" }} {{ event.name }}</a></li>
+        {% endif %}
       {% endfor %}
-    </tbody>
-  </table>
-</div>
-<div class="column">
-  <h2>EU Ladder</h2>
-  <table class="ladder-mini">
-    <thead>
-      <tr>
-        <th>Username</th><th style="text-align:right;">Points</th><th style="text-align:right;">Wins</th><th style="text-align:right;">Losses</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for stats in ladder_eu %}
-        <tr>
-          <td><a href="{% url 'ladder.views.show_player' stats.client.pk %}">{{ stats.client.username }}</a></td>
-          <td style="text-align:right;">{{ stats.ladder_points }}</td>
-          <td style="text-align:right;">{{ stats.ladder_wins }}</td>
-          <td style="text-align:right;">{{ stats.ladder_losses }}</td>
-        </tr>
+      </ul>
+    </div>
+    <div class="module" id="discussions_module">
+      <h2>Discussion</h2>
+      <ul class="listing">
+      {% for dicussion in recent_discussions %}
+        <li><a href="{{ dicussion.url }}">{{ dicussion.subject }}</a></li>
       {% endfor %}
-    </tbody>
-  </table>
+      </ul>
+    </div>
+  </div>
+  <div class="column_1">
+    <div class="module" id="news_module">
+      <h2>News and Updates</h2>
+      <ul class="listing">
+      {% for article in recent_articles %}
+        <li><a href="{{ article.url }}">{{ article.subject }}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="column_1">
+    <div class="module" id="streams_module">
+      <h2>Streams</h2>
+      <div id="stream_list_content">
+        <div id="stream_list_sub_header">LIVE Tournaments</div>
+        <ul id="live_tournament_stream_list" class="stream_list"></ul>
+        <div id="stream_list_sub_header">Upcoming Tournaments</div>
+        <ul id="soon_tournament_stream_list" class="stream_list"></ul>
+        <div id="stream_list_sub_header">Players</div>
+        <ul id="player_stream_list" class="stream_list"></ul>
+        <div id="sl_listing_info">Want to be listed?</div>
+        <div id="sl_listing_info_more">
+          Soon&trade; you will be able to list and manage your streams on the site.  To be listed for 
+          an ongoing tournament, please contact ___ on ___ with your Twitch ID and Name.  Thanks!
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="column">
-  <h2>KR Ladder</h2>
-  <table class="ladder-mini">
-    <thead>
-      <tr><th style="text-align:center">Coming Soon!</th></tr>
-    </thead>
-  </table>
+<div class="row" id="ladder_row">
+  <div class="column_1">
+    <div class="module">
+      <h2>NA Ladder</h2>
+      <table class="ladder-mini">
+        <thead>
+          <tr>
+            <th>Username</th><th style="text-align:right;">Points</th><th style="text-align:right;">Wins</th><th style="text-align:right;">Losses</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stats in ladder_na %}
+            <tr>
+              <td><a href="{% url 'ladder.views.show_player' stats.client.pk %}">{{ stats.client.username }}</a></td>
+              <td style="text-align:right;">{{ stats.ladder_points }}</td>
+              <td style="text-align:right;">{{ stats.ladder_wins }}</td>
+              <td style="text-align:right;">{{ stats.ladder_losses }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="column_1">
+    <div class="module">
+      <h2>EU Ladder</h2>
+      <table class="ladder-mini">
+        <thead>
+          <tr>
+            <th>Username</th><th style="text-align:right;">Points</th><th style="text-align:right;">Wins</th><th style="text-align:right;">Losses</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stats in ladder_eu %}
+            <tr>
+              <td><a href="{% url 'ladder.views.show_player' stats.client.pk %}">{{ stats.client.username }}</a></td>
+              <td style="text-align:right;">{{ stats.ladder_points }}</td>
+              <td style="text-align:right;">{{ stats.ladder_wins }}</td>
+              <td style="text-align:right;">{{ stats.ladder_losses }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="column_1">
+    <div class="module">
+      <h2>KR Ladder</h2>
+      <table class="ladder-mini">
+        <thead>
+          <tr><th style="text-align:center">Coming Soon!</th></tr>
+        </thead>
+      </table>
+    </div>
+  </div>
 </div>
 {% endblock %}

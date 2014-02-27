@@ -1,0 +1,21 @@
+{
+  "success": "true",
+  "tournaments": [{
+    "id": "t_1",
+    "name": "Starbow Invitational Qualifiers",
+    "info": "Thursday February 28th.  Who will win the chance to play in this weekend's Starbow Invitational?",
+    "live": "false",
+    "streams": [{
+      "name": "Xiphias",
+      "url":  "http://www.twitch.tv/sc2_starbow",
+      "viewers": ""
+    }]
+  }, {
+    "id": "t_2",
+    "name": "Starbow Invitational",
+    "info": "Saturday March 1st.  $1200 Starbow Invitational",
+    "live": "false",
+    "date": ""
+  }],
+  "users": []
+}
