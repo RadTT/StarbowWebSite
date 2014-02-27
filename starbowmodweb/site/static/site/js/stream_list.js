@@ -46,7 +46,7 @@ var StreamListHandler = (function () {
       dataType: "json",
       success: function (response) {
         if (!response.success) {
-          alert("not successful");
+          //alert("not successful");
           return;
         }
         _streamList = response;
@@ -55,7 +55,7 @@ var StreamListHandler = (function () {
         }
       },
       error: function (a,b,c) {
-        alert("error getting streams list: " + c);
+        //alert("error getting streams list: " + c);
       }
     });
 	};
@@ -305,7 +305,7 @@ var StreamListHandler = (function () {
 				tpl = response;
 			},
 			error: function (a,b,c) {
-				alert("Error getting template: " + c);
+				//alert("Error getting template: " + c);
 			}
 		});
 		return tpl;
